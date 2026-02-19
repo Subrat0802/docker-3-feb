@@ -23,7 +23,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.backend
           push: true
-          tags: Subrat0802/docker-3-feb:${{ github.sha }}
+          tags: Subrat08/docker-3-feb:${{ github.sha }}
 
     #   - name: Deploy to VM
     #     uses: appleboy/ssh-action@v1.0.0
