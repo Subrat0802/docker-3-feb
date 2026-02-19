@@ -1,0 +1,41 @@
+name: Deploy to backend
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Docker login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./docker/Dockerfile.backend
+          push: true
+          tags: Subrat0802/docker-3-feb:${{ github.sha }}
+
+    #   - name: Deploy to VM
+    #     uses: appleboy/ssh-action@v1.0.0
+    #     with:
+    #       host: ${{ secrets.VM_HOST }}
+    #       username: ${{ secrets.VM_USER }}
+    #       key: ${{ secrets.VM_SSH_KEY }}
+    #       script: |
+    #         docker pull Subrat0802/docker-3-feb:${{ github.sha }}
+    #         docker stop backend || true
+    #         docker rm backend || true
+    #         docker run -d \
+    #           --name backend \
+    #           -p 8080:8080 \
+    #           Subrat0802/docker-3-feb:${{ github.sha }}
